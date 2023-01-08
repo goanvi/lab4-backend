@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: movie-api
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        format_sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: myhome8137
+
+server:
+  port: 8000
+
+jwtSecretKey: gsdgs
+expirationTimeHour: 24
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
