@@ -21,7 +21,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
-//TODO изменить конфигурацию
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -44,24 +43,25 @@ public class SecurityConfig {
     protected SecurityFilterChain loginFilterChain(HttpSecurity http, AuthEntryPoint authEntryPoint) throws Exception {
         http
                 .antMatcher("/api/security/login")
+                .cors().and()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .httpBasic()
+                .httpBasic().authenticationEntryPoint(authEntryPoint)
                 .and()
-                .authorizeRequests().anyRequest().authenticated();
+                .authorizeHttpRequests().anyRequest().authenticated();
         return http.build();
     }
     @Bean
     @Order(2)
     protected SecurityFilterChain apiFilterChain(AuthEntryPoint authEntryPoint, HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
+        httpSecurity.antMatcher("/api/**")
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests()
-                .antMatchers("/api/security/register", "/api/security/logout", "/api/mark").permitAll()
-                .antMatchers( "/error", "/csrf").permitAll()
+                .cors().and ()
+                .authorizeHttpRequests()
+                .antMatchers("/api/security/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)

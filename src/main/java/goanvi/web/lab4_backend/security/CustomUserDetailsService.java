@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-//TODO обработать ошибки
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {

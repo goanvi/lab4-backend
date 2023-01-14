@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public class MarkService {
     }
 
     @Transactional
-    public Mark saveMark(MarkDTO markDTO, JwtAuthToken authToken) throws IdentificationException {
+    public MarkDTO saveMark(MarkDTO markDTO, JwtAuthToken authToken) throws IdentificationException {
         Mark mark = MarkDTOMapper.INSTANCE.toEntity(markDTO);
         CustomUserDetails userDetails = (CustomUserDetails) authToken.getDetails();
         Long id = userDetails.getUserId();
@@ -42,10 +43,12 @@ public class MarkService {
                 mark.getXValue(),
                 mark.getYValue(),
                 mark.getRValue())?"hit":"miss");
-        mark.setTime(LocalDateTime.now());
+        mark.setTime(LocalDateTime.now(ZoneOffset.UTC));
         user.ifPresent(mark::setUser);
         mark.setLeadTime(System.nanoTime()-mark.getLeadTime());
-        return markRepository.save(mark);
+        Mark newMark = markRepository.save(mark);
+        MarkDTO newMarkDTO = MarkMapper.INSTANCE.toDTO(newMark);
+        return newMarkDTO;
     }
 
     @Transactional
@@ -98,5 +101,11 @@ public class MarkService {
         Long id = userDetails.getUserId();
         List<Mark> marks = markRepository.findAllByUser_Id(id, page);
         return marks.stream().map(MarkMapper.INSTANCE::toDTO).collect(Collectors.toList());
+    }
+
+    public Long getMarkCount(JwtAuthToken authToken) {
+        CustomUserDetails userDetails = (CustomUserDetails) authToken.getDetails();
+        Long id = userDetails.getUserId();
+        return markRepository.countMarkByUser_Id(id);
     }
 }

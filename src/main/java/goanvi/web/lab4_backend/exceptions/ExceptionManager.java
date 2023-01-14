@@ -7,23 +7,23 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 @Log4j2
 @ControllerAdvice
-public class ExceptionManager { //TODO: изменить коды ошибок для респонзов
+public class ExceptionManager {
 
     @ExceptionHandler(IdentificationException.class)
     public ResponseEntity<String> handleTestException(IdentificationException e){
         log.error(e);
-        return ResponseEntity.status(404).body("IdentificationException: "+e.getMessage());
+        return ResponseEntity.status(400).body("IdentificationException: "+e.getMessage());
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
         log.error(e);
-        return ResponseEntity.status(404).body("Invalid input data");
+        return ResponseEntity.status(400).body("Invalid input data");
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<String> handleUserAlreadyExistsException(UserAlreadyExistsException e){
         log.error(e);
-        return ResponseEntity.status(404).body("User already exists");
+        return ResponseEntity.status(400).body("User already exists");
     }
 
 }

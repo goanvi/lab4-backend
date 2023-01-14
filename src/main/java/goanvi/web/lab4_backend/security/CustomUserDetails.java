@@ -22,7 +22,7 @@ public class CustomUserDetails implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public static CustomUserDetails build(User user) {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();//TODO заглушка
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         return new CustomUserDetails(
                 user.getId(),
                 user.getUsername(),

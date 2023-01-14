@@ -21,7 +21,6 @@ import java.util.function.Function;
 public class JwtUtils {
     private final long expirationTime;
     private final Key key;
-    //TODO подтягивать ключи из переменных окружения
     public JwtUtils(@Value("${jwtSecretKey}") String jwtKey,
                     @Value("${expirationTimeHour}") String expirationTime) {
         try {

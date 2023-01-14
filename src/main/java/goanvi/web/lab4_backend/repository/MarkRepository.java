@@ -14,5 +14,6 @@ public interface MarkRepository extends JpaRepository<Mark,Long> {
     List<Mark> findAllByUser_Id(@NonNull Long id);
     long deleteAllByUser_Id(@NonNull Long id);
     boolean existsByIdAndUser_Id(@NonNull Long id, @NonNull Long userId);
+    Long countMarkByUser_Id(@NonNull Long id);
 
 }

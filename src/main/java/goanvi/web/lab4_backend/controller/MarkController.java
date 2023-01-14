@@ -18,49 +18,55 @@ import java.util.List;
 @RequestMapping("/api/mark")
 public class MarkController {
     MarkService markService;
+
     @Autowired
     public MarkController(MarkService markService) {
         this.markService = markService;
     }
 
     @PostMapping
-    public Long saveMark(@Validated @RequestBody MarkDTO markDTO,
-                         JwtAuthToken authToken)throws IdentificationException {
+    public ResponseEntity<MarkDTO> saveMark(@Validated @RequestBody MarkDTO markDTO,
+                                            JwtAuthToken authToken) throws IdentificationException {
         markDTO.setLeadTime(System.nanoTime());
-        return markService.saveMark(markDTO, authToken).getId();
-}
+        return ResponseEntity.ok(markService.saveMark(markDTO, authToken));
+    }
 
     @GetMapping
-    public ResponseEntity<List<MarkDTO>> findAllMark(JwtAuthToken authToken){
+    public ResponseEntity<List<MarkDTO>> findAllMark(JwtAuthToken authToken) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(markService.findAllMarks(authToken));
     }
 
     @GetMapping("/page")
-    public ResponseEntity<List<MarkDTO>> findPageMark(@PageableDefault(value = 2, page = 0) Pageable pageable,
-                                                      JwtAuthToken authToken){
+    public ResponseEntity<List<MarkDTO>> findPageMark(@PageableDefault(value = 4, page = 0) Pageable pageable,
+                                                      JwtAuthToken authToken) {
         return ResponseEntity.ok(markService.findAllInPage(pageable, authToken));
 
     }
 
+    @GetMapping("/count")
+    public Long getMarkCount(JwtAuthToken authToken){
+        return markService.getMarkCount(authToken);
+    }
+
 
     @DeleteMapping(path = "{markId}")
-    public ResponseEntity<?> deleteMarkById (@PathVariable("markId") Long markId,
-                                             JwtAuthToken authToken) throws IdentificationException {
+    public ResponseEntity<?> deleteMarkById(@PathVariable("markId") Long markId,
+                                            JwtAuthToken authToken) throws IdentificationException {
         markService.deleteMarkById(markId, authToken);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping
-    public ResponseEntity<Long> deleteAllMark(JwtAuthToken authToken){
+    public ResponseEntity<Long> deleteAllMark(JwtAuthToken authToken) {
         return ResponseEntity.ok(markService.deleteAllMark(authToken));
     }
 
-    @PutMapping(path="{markId}")
-    public ResponseEntity<MarkDTO> updateById (@PathVariable("markId") Long markId,
-                                               @Validated @RequestBody MarkDTO markDTO,
-                                               JwtAuthToken authToken) throws IdentificationException {
-        MarkDTO newMarkDTO = markService.updateById(markId,markDTO, authToken);
+    @PutMapping(path = "{markId}")
+    public ResponseEntity<MarkDTO> updateById(@PathVariable("markId") Long markId,
+                                              @Validated @RequestBody MarkDTO markDTO,
+                                              JwtAuthToken authToken) throws IdentificationException {
+        MarkDTO newMarkDTO = markService.updateById(markId, markDTO, authToken);
         return ResponseEntity.ok(newMarkDTO);
 
     }

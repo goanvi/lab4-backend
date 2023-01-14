@@ -7,18 +7,22 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        dialect:
         format_sql: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: myhome8137
+    url:
+    username:
+    password:
 
 server:
-  port: 8000
+  port:
+  error:
+    path: /error
+    whitelabel:
+      enabled: false
 
-jwtSecretKey: gsdgs
-expirationTimeHour: 24
+jwtSecretKey:
+expirationTimeHour:
 
 logging:
   level:

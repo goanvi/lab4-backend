@@ -1,6 +1,6 @@
 package goanvi.web.lab4_backend.utils;
 
-public class HitMark {//TODO: Поменять область попадания для точки
+public class HitMark {
 
     public static boolean hitMark (double x, double y, double r){
         return hitInCircle(x, y, r) || hitInRectangle(x, y, r) || hitInTriangle(x, y, r);
